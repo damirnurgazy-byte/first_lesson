@@ -1,0 +1,10 @@
+pwd -
+mkdir-
+cd lessons()-
+cd ..-
+cd-
+ls-
+rm []-
+rm -d []-
+rm -rf []-
+
