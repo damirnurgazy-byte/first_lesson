@@ -1,0 +1,13 @@
+
+
+
+pwd - pokazyvaet gde naxodimcya
+mkdir - cozdaniye papki
+cd -voity v papku
+cd .. - vaxodit
+touch
+nano
+rm -d
+rm -rf
+ls
+
