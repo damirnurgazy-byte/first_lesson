@@ -232,6 +232,7 @@ def square(x):  # Принимает одно число
 
 # Тестируем функцию apply_operation с функцией double
 # double передаётся как аргумент (без скобок!)
-print(apply_operation(double, 1, 2, 3, 4, 5))  
+print(apply_operation(double, 1, 2, 3, 4, 5))
+  
 # Тестируем с функцией square
 print(apply_operation(square, 1, 2, 3, 4, 5))  
