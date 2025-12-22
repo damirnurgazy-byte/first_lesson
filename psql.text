@@ -1,0 +1,296 @@
+--Задача 1: Система управления библиотекой (INT, VARCHAR, PRIMARY KEY)
+create table Books (
+   id SERIAL primary key, --уникальный идентификатор книги
+   title VARCHAR(200),  --название книги
+   author VARCHAR(100), -- автор
+   year INT, --год издания
+   pages INT, --количество страниц
+   quantity INT   --количество копий на полке
+);
+
+insert into books (title, author, year, pages, quantity)
+values ('1984', 'George Orwell', 1949, 328, 5),
+       ('О дивный новый мир', 'Aldous Huxley', 1932, 288, 3),
+       ('Война и мир', 'Лев Толстой', 1869, 1225, 2),
+       ('Четвёртое крыло', 'Ребекка Яррос', 2023, 498, 8),
+       ('Железное пламя', 'Ребекка Яррос', 2023, 640, 7),
+       ('Холли', 'Стивен Кинг', 2023, 464, 5),
+       ('Уроки химии', 'Бонни Гармус', 2022, 400, 6),
+       ('Книжные воры', 'Андерс Рислакки', 2021, 416, 4),
+       ('Маленький принц', 'Антуан де Сент-Экзюпери', 1943, 96, 8)
+
+select * 
+from books;
+
+select *
+from books 
+where year > 2020;
+
+select *
+from books 
+where quantity  > 3;
+
+
+
+--Задача 2: Система управления сотрудниками (DECIMAL, FLOAT, DATE, BOOLEAN)
+create table Employees(
+      id SERIAL primary key, --ID сотрудника
+      ferst_name VARCHAR(100), --ИМЯ
+      last_name VARCHAR (100), --ФАМИЛЬЯ
+      salary DECIMAL(12, 2), --зарплата с точностью до копеек
+      rating FLOAT, --рейтинг от 0.0 до 5.0
+      hire_date DATE, --дата найма
+      is_active BOOLEAN --активен ли сотрудник            
+);
+
+INSERT INTO employees (ferst_name, last_name, salary, rating, hire_date, is_active)
+VALUES 
+    ('Максим', 'Горький', 2500000.50, 4.8, '2020-01-15', TRUE),
+    ('Александр', 'Пушкин', 1800000.00, 3.9, '2019-03-20', TRUE),
+    ('Талшын', 'Назарбаева', 1500000.75, 4.2, '2021-06-10', FALSE),
+    ('Анна', 'Ахматова', 2200000.00, 4.5, '2018-11-05', TRUE),
+    ('Сергей', 'Есенин', 1650000.25, 3.7, '2022-02-28', TRUE),
+    ('Марина', 'Цветаева', 2800000.00, 4.9, '2017-09-12', TRUE),
+    ('Владимир', 'Маяковский', 1900000.50, 4.1, '2020-07-01', FALSE),
+    ('Борис', 'Пастернак', 2100000.75, 4.3, '2019-05-18', TRUE),
+    ('Иван', 'Бунин', 1750000.00, 3.8, '2021-12-22', TRUE),
+    ('Фёдор', 'Тютчев', 2400000.25, 4.6, '2018-04-30', FALSE) 
+    
+    
+select * 
+from books;
+
+select * 
+from employees
+where is_active = TRUE;
+
+select *
+from employees
+where salary > 2000000;
+
+select *
+from employees 
+where rating >4.0;
+
+select AVG(salary)
+from employees;
+
+
+
+
+--Задача 3: Система управления блогом с комментариями (FOREIGN KEY, TIMESTAMP)
+create table Posts( --(Посты)
+      id SERIAL primary key,
+      title VARCHAR(200), -- название поста
+      content TEXT, -- содержание поста
+      author VARCHAR(100), --автор
+      created_at TIMESTAMP, -- когда создан пост
+      views INT --количество просмотров      
+);
+create table Comments(
+       id SERIAL primary key,
+       post_id INT, --ID поста (FOREIGN KEY на Posts!)
+       author VARCHAR(100), --автор
+       text TEXT, -- содержание поста
+       created_at TIMESTAMP,
+       CONSTRAINT fk_post
+      foreign key (post_id)
+      references posts(id)
+      on delete cascade         
+);
+
+INSERT INTO posts(title, content, author, created_at, views)
+VALUES 
+    ('Как начать программировать', 'Полное руководство для новичков. Выберите язык, практикуйтесь каждый день и не бойтесь ошибок!', 'Максим', CURRENT_TIMESTAMP, 100),
+    ('Python vs Java', 'Сравнение двух популярных языков. Python проще для начинающих, Java мощнее для enterprise.', 'Александр', CURRENT_TIMESTAMP, 250),
+    ('SQL для начинающих', 'Основы SQL: SELECT, JOIN, WHERE. Все что нужно знать для работы с базами данных.', 'Талшын', CURRENT_TIMESTAMP, 180),
+    ('Лучшие книги по программированию', 'Топ-10 книг которые должен прочитать каждый разработчик в 2024 году.', 'Анна', CURRENT_TIMESTAMP, 320);
+
+
+INSERT INTO comments(post_id, author, text, created_at)
+VALUES 
+    (1, 'Иван', 'Отличная статья! Очень помогла разобраться', CURRENT_TIMESTAMP),
+    (1, 'Мария', 'Спасибо за помощь, начала учить Python', CURRENT_TIMESTAMP),
+    (1, 'Дамир', 'А какой язык лучше для новичка?', CURRENT_TIMESTAMP),
+    (2, 'Петр', 'Java лучше для серьезных проектов', CURRENT_TIMESTAMP),
+    (2, 'Ольга', 'Python быстрее изучается, согласна с автором', CURRENT_TIMESTAMP),
+    (2, 'Сергей', 'Использую оба языка, каждый хорош по-своему', CURRENT_TIMESTAMP),
+    (3, 'Айгуль', 'JOIN все еще не понимаю, есть примеры?', CURRENT_TIMESTAMP),
+    (3, 'Нурлан', 'Спасибо! Наконец-то разобрался с SQL', CURRENT_TIMESTAMP),
+    (4, 'Елена', 'Добавьте "Clean Code" в список!', CURRENT_TIMESTAMP),
+    (4, 'Артем', 'Прочитал половину из списка, реально полезно', CURRENT_TIMESTAMP);
+
+
+select *
+from posts;
+
+select *
+from comments; 
+
+select p.title, p.author, c.text
+from posts p join comments c 
+on p.id = c.post_id;
+
+select p.title, p.author, c.text
+from posts p join comments c 
+on p.id = c.post_id 
+where p.id = 1;
+/*
+insert into comments(post_id, author, text, created_at)
+values (999, 'Хакер', 'Хак', CURRENT_TIMESTAMP);
+*/
+
+
+--Задача 4: Система интернет-магазина (ALTER TABLE, UPDATE, DELETE)
+create table Products(
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100),
+      category VARCHAR(50),
+      price INT,
+      stock INT
+);
+
+insert into products (name, category, price, stock)
+values 
+    ('Laptop', 'Electronics', 1000000, 5),
+    ('Mouse', 'Electronics', 50000, 15),
+    ('Headphones', 'Electronics', 80000, 12),
+    ('Shirt', 'Clothing', 30000, 20),
+    ('Jeans', 'Clothing', 60000, 10),
+    ('Winter Jacket', 'Clothing', 120000, 8),
+    ('Apple', 'Food', 500, 0),
+    ('Banana', 'Food', 300, 50),
+    ('Bread', 'Food', 400, 25),
+    ('Football', 'Sports', 45000, 18);
+
+
+select * 
+from products;
+
+alter table products add column discount float default 0.0;
+
+alter table products add column in_stock boolean default true;
+
+
+update products set discount = 0.1 
+where category = 'Electronics';
+
+update products set in_stock = false 
+where stock = 0;
+
+update products set price = price + (price * 0.05) 
+where category = 'Clothing';
+
+select name, price, discount, (price-(price * discount)) as final_price 
+from products;
+
+delete from products where in_stock = false and stock = 0;
+
+
+
+
+--Задача 5: Система управления школой (FOREIGN KEY ON DELETE CASCADE, JOIN)
+
+create table Teachers (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  subject VARCHAR(50),
+  salary DECIMAL(10, 2),
+  hire_date DATE
+);
+
+
+create table Grades (
+  id SERIAL PRIMARY key,
+  student_name VARCHAR(100),
+  teacher_id INT,
+  subject VARCHAR(50),
+  score INT,
+  grade_date DATE,
+  CONSTRAINT FK_teachers
+  foreign key (teacher_id)
+  references teachers (id)
+  ON DELETE CASCADE
+);
+
+
+INSERT INTO teachers(first_name, last_name, subject, salary, hire_date)
+VALUES 
+    ('Александр', 'Смирнов', 'Math', 1500000.00, '2020-01-15'),
+    ('Елена', 'Петрова', 'English', 1200000.00, '2019-03-20'),
+    ('Сергей', 'Иванов', 'Physics', 1400000.00, '2018-06-10'),
+    ('Марина', 'Соколова', 'Chemistry', 1300000.00, '2021-09-05'),
+    ('Дмитрий', 'Лебедев', 'History', 1100000.00, '2019-11-12'),
+    ('Анна', 'Кузнецова', 'Biology', 1250000.00, '2020-08-25');
+
+
+INSERT INTO grades(student_name, teacher_id, subject, score, grade_date)
+VALUES 
+    ('Иван', 1, 'Math', 85, '2025-12-18'),
+    ('Мария', 1, 'Math', 92, '2025-12-18'),
+    ('Петр', 1, 'Math', 78, '2025-12-18'),
+    ('Дамир', 1, 'Math', 88, '2025-12-17'),
+    ('Анна', 2, 'English', 88, '2025-12-18'),
+    ('Николай', 2, 'English', 95, '2025-12-18'),
+    ('Айгуль', 2, 'English', 82, '2025-12-17'),
+    ('София', 3, 'Physics', 81, '2025-12-18'),
+    ('Дмитрий', 3, 'Physics', 89, '2025-12-18'),
+    ('Олег', 3, 'Physics', 76, '2025-12-16'),
+    ('Наталия', 4, 'Chemistry', 91, '2025-12-18'),
+    ('Максим', 4, 'Chemistry', 84, '2025-12-17'),
+    ('Елена', 4, 'Chemistry', 90, '2025-12-16'),
+    ('Сергей', 5, 'History', 87, '2025-12-18'),
+    ('Ольга', 5, 'History', 93, '2025-12-17'),
+    ('Артем', 6, 'Biology', 79, '2025-12-18'),
+    ('Виктория', 6, 'Biology', 94, '2025-12-17'),
+    ('Денис', 6, 'Biology', 86, '2025-12-16');
+
+select * from teachers;
+select * from grades;
+
+select g.student_name, g.score, t.first_name, t.last_name, t.subject
+from teachers t 
+join grades g 
+on t.id = g.teacher_id;
+
+
+select t.first_name, t.last_name, AVG(g.score) as average_score
+from teachers t 
+join grades g 
+on t.id = g.teacher_id
+group by t.id;
+
+
+select g.student_name, t.first_name, t.last_name, g.score
+from teachers t 
+join grades g 
+on t.id = g.teacher_id
+order by g.score desc
+limit 5;
+
+
+ALTER TABLE teachers 
+ADD COLUMN rating DECIMAL(3,2);
+
+UPDATE teachers SET rating = 4.5 WHERE id = 1;
+UPDATE teachers SET rating = 4.8 WHERE id = 2;  
+UPDATE teachers SET rating = 3.9 WHERE id = 3;  
+UPDATE teachers SET rating = 4.2 WHERE id = 4;  
+UPDATE teachers SET rating = 3.5 WHERE id = 5;  
+UPDATE teachers SET rating = 4.6 WHERE id = 6;
+
+SELECT * from teachers;
+
+UPDATE teachers SET salary = salary + 500000 WHERE rating > 4.0;
+
+SELECT * from teachers;
+
+DELETE FROM teachers WHERE id = 3;
+ 
+SELECT * from teachers;
+ 
+SELECT * FROM grades WHERE teacher_id = 3;
+SELECT * from grades;
+
+
